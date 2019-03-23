@@ -6,7 +6,7 @@ use yii\helpers\Url;
 
 ?>
 
-<?= $model->name ?>
+<?= Html::encode($model->name) ?>
 
 <?php $changeForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/admin/change_test'])]); ?>
     <?= $changeForm->field($model, 'test_id')->hiddenInput()->label(false) ?>

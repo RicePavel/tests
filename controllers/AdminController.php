@@ -55,8 +55,9 @@ class AdminController extends Controller {
         return $this->render('test_one', ['model' => $model]);
     }
     
-    public function actionTest_change() {
-        return $this->render('test_change');
+    public function actionTest_change($test_id) {
+        $model = test::findOne($test_id);
+        return $this->render('test_change', ['model' => $model]);
     }
 }
 

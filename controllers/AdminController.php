@@ -56,8 +56,26 @@ class AdminController extends Controller {
     }
     
     public function actionTest_change($test_id) {
-        $model = test::findOne($test_id);
+        $model = Test::findOne($test_id);
+        if (\Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['/admin/test_one', 'test_id' => $test_id]);
+        }
         return $this->render('test_change', ['model' => $model]);
     }
+    
+    public function actionTest_delete() {
+        $model = new Test();
+        if (\Yii::$app->request->isPost) {
+            $post = \Yii::$app->request->post();
+            $test_id = (int) $post['Test']['test_id'];
+            $model = Test::findOne($test_id);
+            if ($model && $model->delete()) {
+                return $this->redirect(['/admin/tests']);
+            }
+        }
+        \Yii::$app->session->addFlash('error', 'Не удалось удалить. ');
+        return $this->redirect(['/admin/test_one', 'test_id' => $model->test_id]);
+    }
+    
 }
 

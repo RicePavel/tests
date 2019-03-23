@@ -6,14 +6,20 @@ use yii\helpers\Url;
 
 ?>
 
+<?php 
+
+ if (\Yii::$app->session->hasFlash('error')) {
+     echo \Yii::$app->session->getFlash('error');
+ }
+?>
+
 <?= Html::encode($model->name) ?>
 
-<?php $changeForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/admin/change_test'])]); ?>
-    <?= $changeForm->field($model, 'test_id')->hiddenInput()->label(false) ?>
+<?php $changeForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/admin/test_change', 'test_id' => $model->test_id])]); ?>
     <?= Html::submitButton('Изменить') ?>
 <?php ActiveForm::end() ?>
 
-<?php $deleteForm = ActiveForm::begin(); ?>
+<?php $deleteForm = ActiveForm::begin(['action' => Url::to(['/admin/test_delete'])]); ?>
     <?= $deleteForm->field($model, 'test_id')->hiddenInput()->label(false) ?>
     <?= Html::submitButton('Удалить') ?>
 <?php ActiveForm::end() ?>

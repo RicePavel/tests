@@ -4,5 +4,10 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 
-echo 'change_test';
+?>
+
+<?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
+    <?= $form->field($model, 'name')->textarea()->label(false) ?>
+    <?= Html::submitButton('Сохранить') ?>
+<?php ActiveForm::end(); ?>
 

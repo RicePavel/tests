@@ -15,16 +15,16 @@ use yii\helpers\Url;
 
 <?= Html::encode($model->name) ?>
 
-<?php $changeForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/admin/test_change', 'test_id' => $model->test_id])]); ?>
+<?php $changeForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/test/test_change', 'test_id' => $model->test_id])]); ?>
     <?= Html::submitButton('Изменить') ?>
 <?php ActiveForm::end() ?>
 
-<?php $deleteForm = ActiveForm::begin(['action' => Url::to(['/admin/test_delete'])]); ?>
+<?php $deleteForm = ActiveForm::begin(['action' => Url::to(['/test/test_delete'])]); ?>
     <?= $deleteForm->field($model, 'test_id')->hiddenInput()->label(false) ?>
     <?= Html::submitButton('Удалить') ?>
 <?php ActiveForm::end() ?>
 
-<?php $addQuestionForm = ActiveForm::begin(); ?>
+<?php $addQuestionForm = ActiveForm::begin(['action' => Url::to(['/test/add_question'])]); ?>
     <?= $addQuestionForm->field($model, 'test_id')->hiddenInput()->label(false) ?>
     <?= Html::submitButton('Добавить вопрос') ?>
 <?php ActiveForm::end() ?>

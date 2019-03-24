@@ -8,7 +8,7 @@ use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\ar\Test;
 
-class AdminController extends Controller {
+class TestController extends Controller {
     
     public function behaviors() {
         return [
@@ -45,7 +45,7 @@ class AdminController extends Controller {
         $model = new Test();
         if (\Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
                 && $model->save()) {
-            return $this->redirect(['/admin/tests']);
+            return $this->redirect(['/test/tests']);
         }
         return $this->render('tests', ['testArray' => $testArray, 'model' => $model]);
     }
@@ -58,7 +58,7 @@ class AdminController extends Controller {
     public function actionTest_change($test_id) {
         $model = Test::findOne($test_id);
         if (\Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['/admin/test_one', 'test_id' => $test_id]);
+            return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
         }
         return $this->render('test_change', ['model' => $model]);
     }
@@ -70,11 +70,15 @@ class AdminController extends Controller {
             $test_id = (int) $post['Test']['test_id'];
             $model = Test::findOne($test_id);
             if ($model && $model->delete()) {
-                return $this->redirect(['/admin/tests']);
+                return $this->redirect(['/test/tests']);
             }
         }
         \Yii::$app->session->addFlash('error', 'Не удалось удалить. ');
-        return $this->redirect(['/admin/test_one', 'test_id' => $model->test_id]);
+        return $this->redirect(['/test/test_one', 'test_id' => $model->test_id]);
+    }
+    
+    public function actionAdd_question() {
+        return $this->render('add_question');
     }
     
 }

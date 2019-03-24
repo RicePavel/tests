@@ -44,7 +44,7 @@ AppAsset::register($this);
     }
     $items[] = ['label' => 'Home', 'url' => ['/site/index']];
     if (Yii::$app->user->getIdentity()->is_admin) {
-        $items[] = ['label' => 'Тесты', 'url' => ['/admin/tests']];
+        $items[] = ['label' => 'Тесты', 'url' => ['/test/tests']];
     }
     if (Yii::$app->user->isGuest) {
         $items[] = ['label' => 'Login', 'url' => ['/site/login']];

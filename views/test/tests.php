@@ -14,7 +14,7 @@ use yii\helpers\Url;
 <?php
 foreach ($testArray as $test) {
     ?>
-    <a href="<?= Url::to(['/admin/test_one', 'test_id' => $test->test_id]) ?>"><?= $test->name ?></a> <br/>
+    <a href="<?= Url::to(['/test/test_one', 'test_id' => $test->test_id]) ?>"><?= $test->name ?></a> <br/>
 <?php
 
 }

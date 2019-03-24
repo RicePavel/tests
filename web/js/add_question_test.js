@@ -25,6 +25,20 @@ $(document).ready(function() {
         renderOptions();
     });
     
+    $('#save_submit').click(function() {
+        $.ajax({
+            type: 'POST',
+            url: '?r=test/add_question',
+            data: {
+                question: $.toJSON(question)
+            },
+            success: function(response) {
+                alert('success');
+            }
+        });
+        return false;
+    });
+    
     
     function renderOptions() {
         var container = $('#options');

@@ -24,7 +24,8 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/add_question_test.js',
-        'ls/jquery-3.3.1.min.js'
+        'ls/jquery-3.3.1.min.js',
+        'js/jquery.json.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

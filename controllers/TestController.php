@@ -78,8 +78,13 @@ class TestController extends Controller {
     }
     
     public function actionAdd_question() {
+        if (\Yii::$app->request->isPost) {
+            $post = \Yii::$app->request->post();
+        }
         return $this->render('add_question');
     }
+    
+    
     
 }
 

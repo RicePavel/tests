@@ -103,7 +103,19 @@ class TestController extends Controller {
     }
     
     public function actionDelete_question() {
-        
+        $post = \Yii::$app->request->post();
+        $question_id = $post['question_id'];
+        $test_id = $post['test_id'];
+        $model = Question::findOne($question_id);
+        if ($model) {
+            $ok = $model->delete();
+            if (!$ok) {
+                \Yii::$app->session->addFlash('error', implode(', ', $model->getErrorSummary()));
+            }
+        } else {
+            \Yii::$app->session->addFlash('error', 'Данные не найдены');
+        }
+        return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
     }
     
     public function actionUp_question() {

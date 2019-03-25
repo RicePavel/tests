@@ -32,8 +32,13 @@ use yii\helpers\Url;
 
 <div>
     <div><?= $question->description ?>
-    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id, 'test_id' => $model->test_id]) ?>">Изменить</a>&nbsp;
-    <form action="<?= Url::to(['/test/delete_question']) ?>" style="display: inline;"><input type="hidden" name="question_id" value="<?= $question->question_id ?>" /><button href="#">Удалить</button></form>&nbsp;
+    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id, 'test_id' => $model->test_id]) ?>">Изменить</a>
+    <?php $form = ActiveForm::begin(['action' => Url::to(['test/delete_question']), 'options' => ['style' => 'display: inline']]); ?>
+        <input type="hidden" name="question_id" value="<?= $question->question_id ?>" />
+        <input type="hidden" name="test_id" value="<?= $model->test_id ?>" />
+        <button href="#">Удалить</button>
+    <?php ActiveForm::end() ?>
+    
     <a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
     </div>
     <ul>

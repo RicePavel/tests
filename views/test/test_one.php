@@ -24,8 +24,7 @@ use yii\helpers\Url;
     <?= Html::submitButton('Удалить') ?>
 <?php ActiveForm::end() ?>
 
-<?php $addQuestionForm = ActiveForm::begin(['action' => Url::to(['/test/add_question'])]); ?>
-    <?= $addQuestionForm->field($model, 'test_id')->hiddenInput()->label(false) ?>
+<?php $addQuestionForm = ActiveForm::begin(['method' => 'GET', 'action' => Url::to(['/test/add_question', 'test_id' => $model->test_id])]); ?>
     <?= Html::submitButton('Добавить вопрос') ?>
 <?php ActiveForm::end() ?>
 

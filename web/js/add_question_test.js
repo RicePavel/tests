@@ -26,14 +26,21 @@ $(document).ready(function() {
     });
     
     $('#save_submit').click(function() {
+        var test_id = $('#test_id').val();
+        question.description = $('#description_area').val();
         $.ajax({
             type: 'POST',
             url: '?r=test/add_question',
             data: {
-                question: $.toJSON(question)
+                question: $.toJSON(question),
+                test_id: test_id
             },
             success: function(response) {
-                alert('success');
+                if (response.status) {
+                    window.location.href = '?r=test/test_one&test_id=' + test_id;
+                } else {
+                    alert(response.error);
+                }
             }
         });
         return false;

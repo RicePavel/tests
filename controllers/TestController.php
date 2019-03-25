@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\ar\Test;
+use app\components\Questions;
 
 class TestController extends Controller {
     
@@ -80,8 +81,16 @@ class TestController extends Controller {
     public function actionAdd_question() {
         if (\Yii::$app->request->isPost) {
             $post = \Yii::$app->request->post();
+            $obj = json_decode($post['question']);
+            $test_id = $post['test_id'];
+            $result = Questions::saveQuestion($obj, $test_id);
+            $response = \Yii::$app->response;
+            $response->format = \yii\web\Response::FORMAT_JSON;
+            $response->data = $result;
+        } else {
+            $test_id = \Yii::$app->request->get()['test_id'];
+            return $this->render('add_question', ['test_id' => $test_id]);
         }
-        return $this->render('add_question');
     }
     
     

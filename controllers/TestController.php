@@ -57,7 +57,8 @@ class TestController extends Controller {
     }
     
     public function actionTest_change($test_id) {
-        $model = Test::findOne($test_id);
+        //$model = Test::findOne($test_id);
+        $model = Test::find()->with(['questions', 'questions.question_options'])->where(['test_id' => $test_id])->one();
         if (\Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
         }

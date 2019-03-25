@@ -23,5 +23,9 @@ class Test extends ActiveRecord {
         ];
     }
     
+    public function getQuestions() {
+        return $this->hasMany(Question::className(), ['test_id' => 'test_id']);
+    }
+    
 }
 

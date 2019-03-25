@@ -28,3 +28,15 @@ use yii\helpers\Url;
     <?= Html::submitButton('Добавить вопрос') ?>
 <?php ActiveForm::end() ?>
 
+<?php foreach ($model->questions as $question) { ?>
+
+    <div><?= $question->description ?></div>
+    <ul>
+    <?php foreach ($question->question_options as $option) { ?>
+        <li><?= $option->description ?></li>
+    <?php } ?>
+    </ul>
+    
+<?php } ?>
+
+

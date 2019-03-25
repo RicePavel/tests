@@ -15,10 +15,10 @@ class TestController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['tests', 'test_one', 'test_change'],
+                'only' => ['tests', 'test_one', 'test_change', 'change_question', 'get_question', 'delete_question', 'up_question', 'down_question', 'add_question'],
                 'rules' => [
                     [
-                        'actions' => ['tests', 'test_one', 'test_change'],
+                        'actions' => ['tests', 'test_one', 'test_change', 'change_question', 'get_question', 'delete_question', 'up_question', 'down_question', 'add_question'],
                         'allow' => true,
                         'matchCallback' => function($rule, $action) {
                             return $this->checkAdmin();
@@ -57,7 +57,6 @@ class TestController extends Controller {
     }
     
     public function actionTest_change($test_id) {
-        //$model = Test::findOne($test_id);
         $model = Test::find()->with(['questions', 'questions.question_options'])->where(['test_id' => $test_id])->one();
         if (\Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
@@ -77,6 +76,26 @@ class TestController extends Controller {
         }
         \Yii::$app->session->addFlash('error', 'Не удалось удалить. ');
         return $this->redirect(['/test/test_one', 'test_id' => $model->test_id]);
+    }
+    
+    public function actionChange_question($question_id) {
+        return $this->render('change_question', ['question_id' => $question_id]);
+    }
+    
+    public function actionGet_question() {
+        
+    }
+    
+    public function actionDelete_question() {
+        
+    }
+    
+    public function actionUp_question() {
+        
+    }
+    
+    public function actionDown_question() {
+        
     }
     
     public function actionAdd_question() {

@@ -30,12 +30,16 @@ use yii\helpers\Url;
 
 <?php foreach ($model->questions as $question) { ?>
 
-    <div><?= $question->description ?></div>
+<div>
+    <div><?= $question->description ?>
+    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id]) ?>">Изменить</a>&nbsp;<a href="#">Удалить</a>&nbsp;<a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
+    </div>
     <ul>
     <?php foreach ($question->question_options as $option) { ?>
-        <li><?= $option->description ?></li>
+        <li><?= $option->description ?><?= ($option->is_correct ? ' (+)' : '') ?></li>
     <?php } ?>
     </ul>
+</div>
     
 <?php } ?>
 

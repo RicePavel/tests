@@ -27,5 +27,9 @@ class Test extends ActiveRecord {
         return $this->hasMany(Question::className(), ['test_id' => 'test_id']);
     }
     
+    public function getSorted_questions() {
+        return $this->hasMany(Question::className(), ['test_id' => 'test_id'])->orderBy(['question.num' => SORT_ASC]);
+    }
+    
 }
 

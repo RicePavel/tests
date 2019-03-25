@@ -20,5 +20,9 @@ class Question extends ActiveRecord {
         return $this->hasMany(Question_option::className(), ['question_id' => 'question_id']);
     }
     
+    public function getSorted_question_options() {
+        return $this->hasMany(Question_option::className(), ['question_id' => 'question_id'])->orderBy(['question_option.num' => SORT_ASC]);
+    }
+    
 }
 

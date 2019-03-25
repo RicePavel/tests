@@ -48,7 +48,7 @@ class Questions {
             return $result;
         }
         $max = (new Query())->select(['num'])->from('question')->max('num');
-        if ($max) {
+        if (!$max) {
             $max = 0;
         }
         $num = $max + 1;

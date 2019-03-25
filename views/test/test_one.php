@@ -28,14 +28,16 @@ use yii\helpers\Url;
     <?= Html::submitButton('Добавить вопрос') ?>
 <?php ActiveForm::end() ?>
 
-<?php foreach ($model->questions as $question) { ?>
+<?php foreach ($model->sorted_questions as $question) { ?>
 
 <div>
     <div><?= $question->description ?>
-    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id, 'test_id' => $model->test_id]) ?>">Изменить</a>&nbsp;<a href="#">Удалить</a>&nbsp;<a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
+    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id, 'test_id' => $model->test_id]) ?>">Изменить</a>&nbsp;
+    <form action="<?= Url::to(['/test/delete_question']) ?>" style="display: inline;"><input type="hidden" name="question_id" value="<?= $question->question_id ?>" /><button href="#">Удалить</button></form>&nbsp;
+    <a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
     </div>
     <ul>
-    <?php foreach ($question->question_options as $option) { ?>
+    <?php foreach ($question->sorted_question_options as $option) { ?>
         <li><?= $option->description ?><?= ($option->is_correct ? ' (+)' : '') ?></li>
     <?php } ?>
     </ul>

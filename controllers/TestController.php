@@ -53,7 +53,7 @@ class TestController extends Controller {
     }
     
     public function actionTest_one($test_id) {
-        $model = Test::findOne($test_id);
+        $model = Test::find()->with(['sorted_questions', 'sorted_questions.sorted_question_options'])->where(['test_id' => $test_id])->one();
         return $this->render('test_one', ['model' => $model]);
     }
     

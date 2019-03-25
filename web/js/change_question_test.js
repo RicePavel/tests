@@ -14,6 +14,7 @@ $(document).ready(function() {
     };
     
     var question_id = $('#question_id').val();
+    var test_id = $('#test_id').val();
     $.ajax({
         type: 'GET',
         url: '?r=test/get_question',
@@ -41,14 +42,13 @@ $(document).ready(function() {
     });
     
     $('#save_submit').click(function() {
-        var test_id = $('#test_id').val();
         question.description = $('#description_area').val();
         $.ajax({
             type: 'POST',
-            url: '?r=test/add_question',
+            url: '?r=test/change_question',
             data: {
                 question: $.toJSON(question),
-                test_id: test_id
+                question_id: question_id
             },
             success: function(response) {
                 if (response.status) {

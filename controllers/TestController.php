@@ -79,8 +79,20 @@ class TestController extends Controller {
         return $this->redirect(['/test/test_one', 'test_id' => $model->test_id]);
     }
     
-    public function actionChange_question($question_id) {
-        return $this->render('change_question', ['question_id' => $question_id]);
+    public function actionChange_question() {
+        if (\Yii::$app->request->isPost) {
+            $post = \Yii::$app->request->post();
+            $obj = json_decode($post['question']);
+            $question_id = $post['question_id'];
+            $result = Questions::saveQuestion($obj, $question_id);
+            $response = \Yii::$app->response;
+            $response->format = \yii\web\Response::FORMAT_JSON;
+            $response->data = $result;
+        } else {
+            $question_id = \Yii::$app->request->get()['question_id'];
+            $test_id = \Yii::$app->request->get()['test_id'];
+            return $this->render('change_question', ['question_id' => $question_id, 'test_id' => $test_id]);
+        }
     }
     
     public function actionGet_question($question_id) {

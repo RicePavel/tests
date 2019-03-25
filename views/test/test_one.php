@@ -32,7 +32,7 @@ use yii\helpers\Url;
 
 <div>
     <div><?= $question->description ?>
-    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id]) ?>">Изменить</a>&nbsp;<a href="#">Удалить</a>&nbsp;<a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
+    <a href="<?= Url::to(['/test/change_question', 'question_id' => $question->question_id, 'test_id' => $model->test_id]) ?>">Изменить</a>&nbsp;<a href="#">Удалить</a>&nbsp;<a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
     </div>
     <ul>
     <?php foreach ($question->question_options as $option) { ?>

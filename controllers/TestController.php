@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\ar\Test;
+use app\models\ar\Question;
 use app\components\Questions;
 
 class TestController extends Controller {
@@ -82,8 +83,11 @@ class TestController extends Controller {
         return $this->render('change_question', ['question_id' => $question_id]);
     }
     
-    public function actionGet_question() {
-        
+    public function actionGet_question($question_id) {
+        $model = Question::find()->with(['question_options'])->where(['question_id' => $question_id])->one();
+        $response = \Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_JSON;
+        $response->data = $model->toArray();
     }
     
     public function actionDelete_question() {
@@ -103,7 +107,7 @@ class TestController extends Controller {
             $post = \Yii::$app->request->post();
             $obj = json_decode($post['question']);
             $test_id = $post['test_id'];
-            $result = Questions::saveQuestion($obj, $test_id);
+            $result = Questions::addQuestion($obj, $test_id);
             $response = \Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
             $response->data = $result;

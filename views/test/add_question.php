@@ -3,8 +3,10 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use app\assets\AddQuestionAsset;
 
 $this->title = 'Добавить вопрос';
+AddQuestionAsset::register($this);
 
 ?>
 

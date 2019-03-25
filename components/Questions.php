@@ -4,10 +4,11 @@ namespace app\components;
 
 use app\models\ar\Question;
 use app\models\ar\Question_option;
+use yii\db\Query;
 
 class Questions {
     
-    public static function saveQuestion($obj, $test_id) {
+    public static function addQuestion($obj, $test_id) {
         $result = ['status' => false, 'error' => ''];
         if (!$obj->description || $obj->description === '') {
             $result['error'] = 'Введите текст вопроса';
@@ -46,25 +47,34 @@ class Questions {
             $result['error'] = 'Все варианты не могут быть правильными';
             return $result;
         }
+        $max = (new Query())->select(['num'])->from('question')->max('num');
+        if ($max) {
+            $max = 0;
+        }
+        $num = $max + 1;
         $questionAr = new Question();
         $questionAr->test_id = $test_id;
         $questionAr->description = $obj->description;
+        $questionAr->num = $num;
         $ok = $questionAr->save();
         if (!$ok) {
             $result['error'] = implode(',', $questionAr->getErrorSummary());
             return $result;
         }
         $question_id = $questionAr->question_id;
+        $num = 1;
         foreach ($obj->options as $option) {
             $optionAr = new Question_option();
             $optionAr->question_id = $question_id;
             $optionAr->description = $option->description;
             $optionAr->is_correct = $option->is_correct;
+            $optionAr->num = $num;
             $ok = $optionAr->save();
             if (!$ok) {
                 $result['error'] = implode(', ', $optionAr->getErrorSummary());
                 return $result;
             }
+            $num++;
         }
         $result['status'] = true;
         return $result;

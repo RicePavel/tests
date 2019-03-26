@@ -20,6 +20,7 @@ if ($error) {
     
     <?php $form = ActiveForm::begin(['action' => Url::to(['/testing/test_next'])]); ?>
         <input type="hidden" name="test_id" value="<?= $test_id ?>" />
+        <input type="hidden" name="question_id" value="<?= $question->question_id ?>" />
         <?php foreach ($question->sorted_question_options as $option) { ?>
             <div>
                 <input value="<?= $option->question_option_id ?>" name="options[]" type="checkbox" />

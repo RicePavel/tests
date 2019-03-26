@@ -97,27 +97,35 @@ class TestingController extends Controller {
         $session = \Yii::$app->session;
         $test_id = $post['test_id'];
         $options = $post['options'];
+        $question_id = $post['question_id'];
         if ($test_id) {
             $testModel = $session->get('test_' . $test_id);
             $question = $session->get('current_question_' . $test_id);
             $right_count = $session->get('right_count_' . $test_id);
             if ($testModel !== null && $question !== null && $right_count !== null) {
-                if ($options) {
-                    $isRight = $this->isRight($question, $options);
-                    if ($isRight) {
-                        $right_count++;
-                        $session->set('right_count_' . $test_id, $right_count);
-                    }
-                    $nextQuestion = $this->getNextQuestion($testModel, $question->num);
-                    if ($nextQuestion) {
-                        $session->set('current_question_' . $test_id, $nextQuestion);
-                        $session->set('right_count_' . $test_id, $right_count);
-                        return $this->render('question', ['question' => $nextQuestion, 'test_id' => $test_id]);
+                if ($question->question_id === (int) $question_id) {
+                    if ($options) {
+                        $isRight = $this->isRight($question, $options);
+                        if ($isRight) {
+                            $right_count++;
+                            $session->set('right_count_' . $test_id, $right_count);
+                        }
+                        $nextQuestion = $this->getNextQuestion($testModel, $question->num);
+                        if ($nextQuestion) {
+                            $session->set('current_question_' . $test_id, $nextQuestion);
+                            $session->set('right_count_' . $test_id, $right_count);
+                            return $this->render('question', ['question' => $nextQuestion, 'test_id' => $test_id]);
+                        } else {
+                            $session->remove('test_' . $test_id);
+                            $session->remove('current_question_' . $test_id);
+                            $session->remove('right_count_' . $test_id);
+                            return $this->render('result', ['right_count' => $right_count]);
+                        }
                     } else {
-                        return $this->render('result', ['right_count' => $right_count]);
+                        $error = 'Выберите вариант ответа';
+                        return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
                     }
                 } else {
-                    $error = 'Выберите вариант ответа';
                     return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
                 }
             } else {

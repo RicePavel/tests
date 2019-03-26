@@ -58,7 +58,7 @@ class Questions {
         $questionAr->num = $num;
         $ok = $questionAr->save();
         if (!$ok) {
-            $result['error'] = implode(',', $questionAr->getErrorSummary());
+            $result['error'] = ModelUtils::getModelErrors($questionAr);
             return $result;
         }
         $question_id = $questionAr->question_id;
@@ -71,7 +71,7 @@ class Questions {
             $optionAr->num = $num;
             $ok = $optionAr->save();
             if (!$ok) {
-                $result['error'] = implode(', ', $optionAr->getErrorSummary());
+                $result['error'] = ModelUtils::getModelErrors($optionAr);
                 return $result;
             }
             $num++;
@@ -127,13 +127,13 @@ class Questions {
         $questionAr->description = $obj->description;
         $ok = $questionAr->save();
         if (!$ok) {
-            $result['error'] = implode(',', $questionAr->getErrorSummary());
+            $result['error'] = ModelUtils::getModelErrors($questionAr);
             return $result;
         }
         foreach ($questionAr->question_options as $optionAr) {
             $ok = $optionAr->delete();
-            if (!$ok) {
-                $result['error'] = implode(', ', $optionAr->getErrorSummary());
+            if (!$ok) {      
+                $result['error'] = ModelUtils::getModelErrors($optionAr);
                 return $result;
             }
         }
@@ -146,7 +146,7 @@ class Questions {
             $optionAr->num = $num;
             $ok = $optionAr->save();
             if (!$ok) {
-                $result['error'] = implode(', ', $optionAr->getErrorSummary());
+                $result['error'] = ModelUtils::getModelErrors($optionAr);
                 return $result;
             }
             $num++;
@@ -179,8 +179,8 @@ class Questions {
                 $result['status'] = true;
                 return $result;
             } else {
-                $result['error'] = implode(', ', $question->getErrorSummary()) . 
-                        implode(', ', $question_2->getErrorSummary());
+                $result['error'] = ModelUtils::getModelErrors($question) . 
+                        ModelUtils::getModelErrors($question_2);
                 return $result;
             }
         }
@@ -211,8 +211,8 @@ class Questions {
                 $result['status'] = true;
                 return $result;
             } else {
-                $result['error'] = implode(', ', $question->getErrorSummary()) . 
-                        implode(', ', $question_2->getErrorSummary());
+                $result['error'] = ModelUtils::getModelErrors($question) . 
+                        ModelUtils::getModelErrors($question_2);
                 return $result;
             }
         }

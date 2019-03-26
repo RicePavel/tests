@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use app\models\ar\Test;
 use app\models\ar\Question;
 use app\components\Questions;
+use app\components\ModelUtils;
 
 class TestController extends Controller {
     
@@ -110,7 +111,7 @@ class TestController extends Controller {
         if ($model) {
             $ok = $model->delete();
             if (!$ok) {
-                \Yii::$app->session->addFlash('error', implode(', ', $model->getErrorSummary()));
+                \Yii::$app->session->addFlash('error', ModelUtils::getModelErrors($model));
             }
         } else {
             \Yii::$app->session->addFlash('error', 'Данные не найдены');

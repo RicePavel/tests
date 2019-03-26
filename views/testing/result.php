@@ -6,5 +6,6 @@ use yii\helpers\Url;
 
 ?>
 
-Количество правильных ответов: <?= $right_count ?>
-
+<p>Правильных ответов: <?= $countRight ?></p>
+<p>Неправильных ответов: <?= $countNotRight ?></p>
+<p>Процент правильных ответов: <?= $percentRight ?>%</p>

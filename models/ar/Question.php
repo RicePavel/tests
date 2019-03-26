@@ -6,6 +6,19 @@ use yii\db\ActiveRecord;
 
 class Question extends ActiveRecord {
     
+    public function attributeLabels() {
+        return [
+            'description' => 'Текст вопроса'
+        ];
+    }
+    
+    public function rules() {
+        return [
+            [['description', 'test_id', 'num'], 'required'],
+            [['description'], 'string', 'length' => [1, 255]]
+        ];
+    }
+    
     public function fields() {
         $fields = parent::fields();
         $fields[] = 'question_options';

@@ -92,6 +92,7 @@ class TestingController extends Controller {
         return true;
     }
     
+
     public function actionTest_next() {
         $post = \Yii::$app->request->post();
         $session = \Yii::$app->session;
@@ -119,7 +120,15 @@ class TestingController extends Controller {
                             $session->remove('test_' . $test_id);
                             $session->remove('current_question_' . $test_id);
                             $session->remove('right_count_' . $test_id);
-                            return $this->render('result', ['right_count' => $right_count]);
+                            $countAll = count($testModel->sorted_questions);
+                            $countNotRight = 0;
+                            $percentRight = 0;
+                            if ($countAll !== 0) {
+                                $countNotRight = $countAll - $right_count;
+                                $percentRight = round(($right_count/$countAll)*100);
+                            }
+                            return $this->render('result', 
+                                    ['countRight' => $right_count, 'countNotRight' => $countNotRight, 'percentRight' => $percentRight]);
                         }
                     } else {
                         $error = 'Выберите вариант ответа';
@@ -135,8 +144,6 @@ class TestingController extends Controller {
             $this->redirect(['/testing/tests']);
         }
     }
-    
-    
     
 }
 

@@ -39,7 +39,18 @@ use yii\helpers\Url;
         <button href="#">Удалить</button>
     <?php ActiveForm::end() ?>
     
-    <a href="#">Вверх</a>&nbsp;<a href="#">Вниз</a>
+    <?php $form = ActiveForm::begin(['action' => Url::to(['test/up_question']), 'options' => ['style' => 'display: inline']]); ?>
+        <input type="hidden" name="question_id" value="<?= $question->question_id ?>" />
+        <input type="hidden" name="test_id" value="<?= $model->test_id ?>" />
+        <button href="#">Вверх</button>
+    <?php ActiveForm::end() ?>
+       
+    <?php $form = ActiveForm::begin(['action' => Url::to(['test/down_question']), 'options' => ['style' => 'display: inline']]); ?>
+        <input type="hidden" name="question_id" value="<?= $question->question_id ?>" />
+        <input type="hidden" name="test_id" value="<?= $model->test_id ?>" />
+        <button href="#">Вниз</button>
+    <?php ActiveForm::end() ?>
+        
     </div>
     <ul>
     <?php foreach ($question->sorted_question_options as $option) { ?>

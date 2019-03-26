@@ -155,5 +155,69 @@ class Questions {
         return $result;
     }
     
+    public static function questionUp($question_id) {
+        $result = ['status' => true, 'error' => ''];
+        $question = Question::findOne($question_id);
+        if (!$question) {
+            $result['error'] = 'Вопрос на найден';
+            return $result;
+        }
+        $test_id = $question->test_id;
+        $num = $question->num;
+        $row = \Yii::$app->db->createCommand('select question_id from question where test_id = :test_id and num = (select max(num) from question where test_id = :test_id and num < :num)')
+                ->bindValue(':test_id', $test_id)->bindValue(':num', $num)->queryOne();
+        if ($row) {
+            $question_2 = Question::findOne($row['question_id']);
+            if (!$question) {
+                $result['error'] = 'Вопрос на найден';
+                return $result;
+            }
+            $num_2 = $question_2->num;
+            $question->num = $num_2;
+            $question_2->num = $num;
+            if ($question->save() && $question_2->save()) {
+                $result['status'] = true;
+                return $result;
+            } else {
+                $result['error'] = implode(', ', $question->getErrorSummary()) . 
+                        implode(', ', $question_2->getErrorSummary());
+                return $result;
+            }
+        }
+        return $result;
+    }
+    
+    public static function questionDown($question_id) {
+        $result = ['status' => true, 'error' => ''];
+        $question = Question::findOne($question_id);
+        if (!$question) {
+            $result['error'] = 'Вопрос на найден';
+            return $result;
+        }
+        $test_id = $question->test_id;
+        $num = $question->num;
+        $row = \Yii::$app->db->createCommand('select question_id from question where test_id = :test_id and num = (select min(num) from question where test_id = :test_id and num > :num)')
+                ->bindValue(':test_id', $test_id)->bindValue(':num', $num)->queryOne();
+        if ($row) {
+            $question_2 = Question::findOne($row['question_id']);
+            if (!$question) {
+                $result['error'] = 'Вопрос на найден';
+                return $result;
+            }
+            $num_2 = $question_2->num;
+            $question->num = $num_2;
+            $question_2->num = $num;
+            if ($question->save() && $question_2->save()) {
+                $result['status'] = true;
+                return $result;
+            } else {
+                $result['error'] = implode(', ', $question->getErrorSummary()) . 
+                        implode(', ', $question_2->getErrorSummary());
+                return $result;
+            }
+        }
+        return $result;
+    }
+    
 }
 

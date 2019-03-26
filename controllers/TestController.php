@@ -119,11 +119,25 @@ class TestController extends Controller {
     }
     
     public function actionUp_question() {
-        
+        $post = \Yii::$app->request->post();
+        $question_id = $post['question_id'];
+        $test_id = $post['test_id'];
+        $result = Questions::questionUp($question_id);
+        if (!$result['status']) {
+            \Yii::$app->session->addFlash('error', $result['error']);
+        }
+        return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
     }
     
     public function actionDown_question() {
-        
+        $post = \Yii::$app->request->post();
+        $question_id = $post['question_id'];
+        $test_id = $post['test_id'];
+        $result = Questions::questionDown($question_id);
+        if (!$result['status']) {
+            \Yii::$app->session->addFlash('error', $result['error']);
+        }
+        return $this->redirect(['/test/test_one', 'test_id' => $test_id]);
     }
     
     public function actionAdd_question() {

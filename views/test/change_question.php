@@ -10,12 +10,16 @@ $this->title = 'Изменить вопрос';
 
 ?>
 
+<div id="change_question_loading">
+    Загрузка...
+</div>
+<div id="change_question_container" style="display: none;" >
 <form id="change_question_form">
     Текст вопроса: <br/>
-    <textarea name="description" placeholder="Введите текст вопроса..." id="description_area"></textarea><br/>
+    <textarea class="form-control" name="description" placeholder="Введите текст вопроса..." id="description_area"></textarea><br/>
     <input type="hidden" name="question_id" value="<?= $question_id ?>" id="question_id" />
     <input type="hidden" name="test_id" value="<?= $test_id ?>" id="test_id" />
-    <input id="add_option_submit" type="submit" value="Добавить вариант ответа" /><br/>
+    <input id="add_option_submit" class="btn btn-success" type="submit" value="Добавить вариант ответа" /><br/>
     
     
 </form>
@@ -27,4 +31,5 @@ $this->title = 'Изменить вопрос';
 
 <br/>
 <br/>
-<input id="save_submit" type="submit" value="Сохранить" />
+<input class="btn btn-primary" id="save_submit" type="submit" value="Сохранить" />
+</div>

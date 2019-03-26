@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\RegistrationForm;
+use yii\helpers\Url;
 
 class SiteController extends Controller
 {
@@ -62,6 +63,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        return $this->redirect(Url::to(['testing/tests']));
+        
         $session = Yii::$app->session;
         $active = $session->isActive;
         $guest = Yii::$app->user->isGuest;

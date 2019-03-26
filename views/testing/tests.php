@@ -14,11 +14,12 @@ use yii\helpers\Url;
 ?>
 
 
-
-<?php
-foreach ($testArray as $test) {
+<ul class="list-group">
+    <?php
+    foreach ($testArray as $test) {
+        ?>
+    <li class="list-group-item"><a href="<?= Url::to(['/testing/test_start', 'test_id' => $test->test_id]) ?>"><?= Html::encode($test->name) ?></a></li>
+    <?php
+    }
     ?>
-    <a href="<?= Url::to(['/testing/test_start', 'test_id' => $test->test_id]) ?>"><?= $test->name ?></a> <br/>
-<?php
-
-}
+</ul>

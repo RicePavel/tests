@@ -20,7 +20,7 @@ class TestController extends Controller {
                 'only' => ['tests', 'test_one', 'test_change', 'change_question', 'get_question', 'delete_question', 'up_question', 'down_question', 'add_question'],
                 'rules' => [
                     [
-                        'actions' => ['tests', 'test_one', 'test_change', 'change_question', 'get_question', 'delete_question', 'up_question', 'down_question', 'add_question'],
+                        'actions' => ['tests', 'test_one', 'test_change', 'change_question', 'get_question', 'delete_question', 'up_question', 'down_question', 'add_question', 'test_delete'],
                         'allow' => true,
                         'matchCallback' => function($rule, $action) {
                             return $this->checkAdmin();

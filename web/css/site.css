@@ -113,3 +113,39 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+label {
+    font-weight: normal;
+}
+
+.question_description, .question_button {
+    margin: 10px;
+}
+
+.add_test_button {
+    top: -5px;
+    position: relative;
+}
+
+.test_description {
+    margin: 10px;
+}
+
+.test_change_form {
+    float: left;
+    margin: 0 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.test_add_question_form {
+    margin: 10px;
+}
+
+.question_option {
+    margin: 10px 0;
+}
+
+

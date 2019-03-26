@@ -65,33 +65,6 @@ class TestingController extends Controller {
         }
         return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
     }
-    
-    private function getNextQuestion($testModel, $currentQuestionNum = 0) {
-        $question = null;
-        foreach ($testModel->sorted_questions as $q) {
-            if ($q->num > $currentQuestionNum) {
-                return $q;
-            }
-        }
-        return $question;
-    }
-    
-    private function isRight($question, $options) {
-        foreach ($question->sorted_question_options as $optionsModel) {
-            $id = $optionsModel->question_option_id;
-            if ($optionsModel->is_correct) {
-                if (!in_array($id, $options)) {
-                    return false;
-                }
-            } else {
-                if (in_array($id, $options)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    
 
     public function actionTest_next() {
         $post = \Yii::$app->request->post();
@@ -143,6 +116,32 @@ class TestingController extends Controller {
         } else {
             $this->redirect(['/testing/tests']);
         }
+    }
+    
+    private function getNextQuestion($testModel, $currentQuestionNum = 0) {
+        $question = null;
+        foreach ($testModel->sorted_questions as $q) {
+            if ($q->num > $currentQuestionNum) {
+                return $q;
+            }
+        }
+        return $question;
+    }
+    
+    private function isRight($question, $options) {
+        foreach ($question->sorted_question_options as $optionsModel) {
+            $id = $optionsModel->question_option_id;
+            if ($optionsModel->is_correct) {
+                if (!in_array($id, $options)) {
+                    return false;
+                }
+            } else {
+                if (in_array($id, $options)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
 }

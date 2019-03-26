@@ -12,9 +12,9 @@ AddQuestionAsset::register($this);
 
 <form id="add_question_form">
     Текст вопроса: <br/>
-    <textarea name="description" placeholder="Введите текст вопроса..." id="description_area"></textarea><br/>
+    <textarea class="form-control" name="description" placeholder="Введите текст вопроса..." id="description_area"></textarea><br/>
     <input type="hidden" name="test_id" value="<?= $test_id ?>" id="test_id" />
-    <input id="add_option_submit" type="submit" value="Добавить вариант ответа" /><br/>
+    <input id="add_option_submit" class="btn btn-success" type="submit" value="Добавить вариант ответа" /><br/>
     
 </form>
 
@@ -25,4 +25,4 @@ AddQuestionAsset::register($this);
 
 <br/>
 <br/>
-<input id="save_submit" type="submit" value="Сохранить" />
+<input class="btn btn-primary" id="save_submit" type="submit" value="Сохранить" />

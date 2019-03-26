@@ -6,6 +6,8 @@
 
 $(document).ready(function() {
     
+    
+    
     var question = {
         description: '',
         options: [
@@ -26,6 +28,8 @@ $(document).ready(function() {
             question.options = response.question_options;
             $('#description_area').val(question.description);
             renderOptions();
+            $('#change_question_loading').hide();
+            $('#change_question_container').show();
         }
     });
     
@@ -67,11 +71,11 @@ $(document).ready(function() {
         container.empty();
         question.options.forEach(function(item, i, arr) {
             var checked = (item.is_correct ? 'checked' : '');
-            var el = $('<div>' +
-                    '<input type="text" value="' + item.description + '" class="description" />' +
-                    'Верный вариант:<input ' + checked + '  class="is_correct" type="checkbox" />' +
-                    '<a href="#" class="up">Вверх</a>' +
-                    '<a href="#" class="down">Вниз</a>' +
+            var el = $('<div class="question_option">' +
+                    '<input type="text" size="50" value="' + item.description + '" class="description" />&nbsp;' +
+                    'Верный вариант:<input ' + checked + '  class="is_correct" type="checkbox" />&nbsp;' +
+                    '<a href="#" class="up">Вверх</a>&nbsp;' +
+                    '<a href="#" class="down">Вниз</a>&nbsp;' +
                     '<a href="#" class="delete">Удалить</a>' +
                     '</div>');
             el.find('.description').change(function() {

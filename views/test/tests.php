@@ -13,15 +13,19 @@ use yii\helpers\Url;
  }
 ?>
 
-<?php $form = ActiveForm::begin(['enableClientValidation' => false]); ?>
-    <?= $form->field($model, 'name')->textarea()->label(false) ?>
-    <?= Html::submitButton('Добавить тест') ?>
+<?php $form = ActiveForm::begin(['enableClientValidation' => false, 'options' => ['class' => 'form-inline']]); ?>
+    <?= $form->field($model, 'name')->textInput(['placeholder'=>'введите название теста...'])->label(false) ?>
+    <?= Html::submitButton('Добавить тест', ['class' => 'add_test_button btn btn-primary']) ?>
 <?php ActiveForm::end(); ?>
 
+<ul class="list-group">
 <?php
 foreach ($testArray as $test) {
     ?>
-    <a href="<?= Url::to(['/test/test_one', 'test_id' => $test->test_id]) ?>"><?= $test->name ?></a> <br/>
+    <li class="list-group-item">
+    <a href="<?= Url::to(['/test/test_one', 'test_id' => $test->test_id]) ?>"><?= Html::encode($test->name) ?></a> <br/>
+    </li>
 <?php
-
 }
+?>
+</ul>

@@ -40,7 +40,7 @@ class TestController extends Controller {
     }
     
     public function checkAdmin() {
-        return \Yii::$app->user->getIdentity()->is_admin;
+        return (\Yii::$app->user->getIdentity() && \Yii::$app->user->getIdentity()->is_admin);
     }
     
     public function actionTests() {

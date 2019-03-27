@@ -45,16 +45,16 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $items[] = ['label' => 'Регистрация', 'url' => ['/site/registration']];
     }
-    if (Yii::$app->user->getIdentity()->is_admin) {
+    if (Yii::$app->user->getIdentity() && Yii::$app->user->getIdentity()->is_admin) {
         $items[] = ['label' => 'Редактировать тесты', 'url' => ['/test/tests']];
     }
     if (Yii::$app->user->isGuest) {
-        $items[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $items[] = ['label' => 'Войти', 'url' => ['/site/login']];
     } else {
         $items[] = '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->login . ')',
+                    'Выйти (' . Yii::$app->user->identity->login . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -101,13 +101,6 @@ AppAsset::register($this);
         <?= $content ?>
     </div>
 </div>
-
-    <?php 
-    
-        echo Yii::$app->user->isGuest;
-    
-    ?>
-    
     
 <footer class="footer">
     <div class="container">

@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-    $('.delete_form').submit(function() {
+    $('.delete_form').on('beforeSubmit', function (e) {
         return confirm('Подтвердите удаление');
     });
 });

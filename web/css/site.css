@@ -149,3 +149,12 @@ label {
 }
 
 
+
+.incorrect_answer {
+    color: red;
+}
+
+.correct_answer {
+    color: green;
+    font-weight: bold;
+}

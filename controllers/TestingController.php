@@ -57,6 +57,7 @@ class TestingController extends Controller {
             if ($question) {
                 $session->set('current_question_' . $test_id, $question);
                 $session->set('right_count_' . $test_id, 0);
+                $session->set('answers_' . $test_id, []);
             } else {
                 $error = 'В этом тесте нет вопросов';
             }
@@ -67,11 +68,12 @@ class TestingController extends Controller {
     }
 
     public function actionTest_next() {
+        $error = '';
         $post = \Yii::$app->request->post();
         $session = \Yii::$app->session;
-        $test_id = $post['test_id'];
-        $options = $post['options'];
-        $question_id = $post['question_id'];
+        $test_id = $this->getPostParameter($post, 'test_id');
+        $options = $this->getPostParameter($post, 'options', []);
+        $question_id = $this->getPostParameter($post, 'question_id');
         if ($test_id) {
             $testModel = $session->get('test_' . $test_id);
             $question = $session->get('current_question_' . $test_id);
@@ -84,15 +86,19 @@ class TestingController extends Controller {
                             $right_count++;
                             $session->set('right_count_' . $test_id, $right_count);
                         }
+                        $answers = $session->get('answers_' . $test_id);
+                        $answers[$question->question_id] = $options;
+                        $session->set('answers_' . $test_id, $answers);
                         $nextQuestion = $this->getNextQuestion($testModel, $question->num);
                         if ($nextQuestion) {
                             $session->set('current_question_' . $test_id, $nextQuestion);
                             $session->set('right_count_' . $test_id, $right_count);
-                            return $this->render('question', ['question' => $nextQuestion, 'test_id' => $test_id]);
+                            return $this->render('question', ['error' => $error, 'question' => $nextQuestion, 'test_id' => $test_id]);
                         } else {
                             $session->remove('test_' . $test_id);
                             $session->remove('current_question_' . $test_id);
                             $session->remove('right_count_' . $test_id);
+                            $session->remove('answers_' . $test_id);
                             $countAll = count($testModel->sorted_questions);
                             $countNotRight = 0;
                             $percentRight = 0;
@@ -101,7 +107,11 @@ class TestingController extends Controller {
                                 $percentRight = round(($right_count/$countAll)*100);
                             }
                             return $this->render('result', 
-                                    ['countRight' => $right_count, 'countNotRight' => $countNotRight, 'percentRight' => $percentRight]);
+                                    ['countRight' => $right_count, 
+                                    'countNotRight' => $countNotRight, 
+                                    'percentRight' => $percentRight, 
+                                    'testModel' => $testModel,
+                                    'answers' => $answers]);
                         }
                     } else {
                         $error = 'Выберите вариант ответа';
@@ -142,6 +152,13 @@ class TestingController extends Controller {
             }
         }
         return true;
+    }
+    
+    private function getPostParameter($post, $paramName, $defaultValue = '') {
+        if ($post && is_array($post) && array_key_exists($paramName, $post)) {
+            return $post[$paramName];
+        }
+        return $defaultValue;
     }
     
 }

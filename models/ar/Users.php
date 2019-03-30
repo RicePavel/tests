@@ -11,6 +11,7 @@ class Users extends ActiveRecord implements IdentityInterface
     public function rules() {
         return [
             [['login', 'password'], 'required'],
+            ['login', 'unique', 'message' => 'Такой логин уже существует'],
             [['login'], 'safe']
         ];
     }

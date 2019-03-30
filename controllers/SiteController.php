@@ -63,7 +63,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->redirect(Url::to(['testing/tests']));
+        return $this->redirect(['testing/tests']);
         
         $session = Yii::$app->session;
         $active = $session->isActive;

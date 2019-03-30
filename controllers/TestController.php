@@ -8,8 +8,8 @@ use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\ar\Test;
 use app\models\ar\Question;
-use app\components\Questions;
 use app\components\ModelUtils;
+use app\models\MoveQuestionModel;
 
 class TestController extends Controller {
     
@@ -85,7 +85,8 @@ class TestController extends Controller {
             $post = \Yii::$app->request->post();
             $obj = json_decode($post['question']);
             $question_id = $post['question_id'];
-            $result = Questions::saveQuestion($obj, $question_id);
+            $model = new \app\models\SaveQuestionModel($obj, $question_id);
+            $result = $model->saveQuestion();
             $response = \Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
             $response->data = $result;
@@ -123,7 +124,8 @@ class TestController extends Controller {
         $post = \Yii::$app->request->post();
         $question_id = $post['question_id'];
         $test_id = $post['test_id'];
-        $result = Questions::questionUp($question_id);
+        $model = new MoveQuestionModel($question_id);
+        $result = $model->questionUp($question_id);
         if (!$result['status']) {
             \Yii::$app->session->addFlash('error', $result['error']);
         }
@@ -134,7 +136,8 @@ class TestController extends Controller {
         $post = \Yii::$app->request->post();
         $question_id = $post['question_id'];
         $test_id = $post['test_id'];
-        $result = Questions::questionDown($question_id);
+        $model = new MoveQuestionModel($question_id);
+        $result = $model->questionDown($question_id);
         if (!$result['status']) {
             \Yii::$app->session->addFlash('error', $result['error']);
         }
@@ -146,7 +149,8 @@ class TestController extends Controller {
             $post = \Yii::$app->request->post();
             $obj = json_decode($post['question']);
             $test_id = $post['test_id'];
-            $result = Questions::addQuestion($obj, $test_id);
+            $model = new \app\models\AddQuestionModel($obj, $test_id);
+            $result = $model->addQuestion();
             $response = \Yii::$app->response;
             $response->format = \yii\web\Response::FORMAT_JSON;
             $response->data = $result;

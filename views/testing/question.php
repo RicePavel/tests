@@ -14,11 +14,11 @@ if ($error) {
 
 ?>
 
-<?php if ($question) { ?>
+<?php if ($question && $test_id) { ?>
     
     <div class="question_description"><?= Html::encode($question->description) ?></div>
     
-    <?php $form = ActiveForm::begin(['action' => Url::to(['/testing/test_next'])]); ?>
+    <?php $form = ActiveForm::begin(['action' => Url::to(['/testing/test_next', 'test_id' => $test_id])]); ?>
         <input type="hidden" name="test_id" value="<?= $test_id ?>" />
         <input type="hidden" name="question_id" value="<?= $question->question_id ?>" />
             <?php foreach ($question->sorted_question_options as $option) { ?>

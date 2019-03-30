@@ -8,7 +8,6 @@ use yii\web\Response;
 use yii\filters\AccessControl;
 use app\models\ar\Test;
 use app\models\ar\Question;
-use app\components\Questions;
 
 class TestingController extends Controller {
     
@@ -55,6 +54,7 @@ class TestingController extends Controller {
             $session->set('test_' . $test_id, $model);
             $question = $this->getNextQuestion($model);
             if ($question) {
+                $session->remove('result_' . $test_id);
                 $session->set('current_question_' . $test_id, $question);
                 $session->set('right_count_' . $test_id, 0);
                 $session->set('answers_' . $test_id, []);
@@ -68,63 +68,94 @@ class TestingController extends Controller {
     }
 
     public function actionTest_next() {
-        $error = '';
-        $post = \Yii::$app->request->post();
         $session = \Yii::$app->session;
-        $test_id = $this->getPostParameter($post, 'test_id');
-        $options = $this->getPostParameter($post, 'options', []);
-        $question_id = $this->getPostParameter($post, 'question_id');
-        if ($test_id) {
-            $testModel = $session->get('test_' . $test_id);
-            $question = $session->get('current_question_' . $test_id);
-            $right_count = $session->get('right_count_' . $test_id);
-            if ($testModel !== null && $question !== null && $right_count !== null) {
-                if ($question->question_id === (int) $question_id) {
-                    if ($options) {
-                        $isRight = $this->isRight($question, $options);
-                        if ($isRight) {
-                            $right_count++;
-                            $session->set('right_count_' . $test_id, $right_count);
-                        }
-                        $answers = $session->get('answers_' . $test_id);
-                        $answers[$question->question_id] = $options;
-                        $session->set('answers_' . $test_id, $answers);
-                        $nextQuestion = $this->getNextQuestion($testModel, $question->num);
-                        if ($nextQuestion) {
-                            $session->set('current_question_' . $test_id, $nextQuestion);
-                            $session->set('right_count_' . $test_id, $right_count);
-                            return $this->render('question', ['error' => $error, 'question' => $nextQuestion, 'test_id' => $test_id]);
-                        } else {
-                            $session->remove('test_' . $test_id);
-                            $session->remove('current_question_' . $test_id);
-                            $session->remove('right_count_' . $test_id);
-                            $session->remove('answers_' . $test_id);
-                            $countAll = count($testModel->sorted_questions);
-                            $countNotRight = 0;
-                            $percentRight = 0;
-                            if ($countAll !== 0) {
-                                $countNotRight = $countAll - $right_count;
-                                $percentRight = round(($right_count/$countAll)*100);
+        $request = \Yii::$app->request;
+        $error = '';
+        if (\Yii::$app->request->isGet) {
+            $show = false;
+            $test_id = $request->get('test_id', '');
+            if ($test_id) {
+                $question = $session->get('current_question_' . $test_id);
+                $testResult = $session->get('result_' . $test_id);
+                if ($question !== null) {
+                    $show = true;
+                    return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);   
+                } else if ($question === null && $testResult !== null) {
+                    $show = true;
+                    return $this->render('result', 
+                                    ['countRight' => $testResult['countRight'], 
+                                    'countNotRight' => $testResult['countNotRight'], 
+                                    'percentRight' => $testResult['percentRight'], 
+                                    'testModel' => $testResult['testModel'],
+                                    'answers' => $testResult['answers']]);
+                }
+            }
+            if (!$show) {
+                $error = 'Произошла ошибка';
+                return $this->render('question', ['error' => $error, 'question' => null, 'test_id' => null]);
+            }
+        } else {
+            $test_id = $request->post('test_id', '');
+            $options = $request->post('options', []);
+            $question_id = $request->post('question_id', '');
+            if ($test_id) {
+                $testModel = $session->get('test_' . $test_id);
+                $question = $session->get('current_question_' . $test_id);
+                $right_count = $session->get('right_count_' . $test_id);
+                if ($testModel !== null && $question !== null && $right_count !== null) {
+                    if ($question->question_id === (int) $question_id) {
+                        if ($options) {
+                            $isRight = $this->isRight($question, $options);
+                            if ($isRight) {
+                                $right_count++;
+                                $session->set('right_count_' . $test_id, $right_count);
                             }
-                            return $this->render('result', 
-                                    ['countRight' => $right_count, 
-                                    'countNotRight' => $countNotRight, 
-                                    'percentRight' => $percentRight, 
-                                    'testModel' => $testModel,
-                                    'answers' => $answers]);
+                            $answers = $session->get('answers_' . $test_id);
+                            $answers[$question->question_id] = $options;
+                            $session->set('answers_' . $test_id, $answers);
+                            $nextQuestion = $this->getNextQuestion($testModel, $question->num);
+                            if ($nextQuestion) {
+                                $session->set('current_question_' . $test_id, $nextQuestion);
+                                $session->set('right_count_' . $test_id, $right_count);
+                                return $this->render('question', ['error' => $error, 'question' => $nextQuestion, 'test_id' => $test_id]);
+                            } else {
+                                $session->remove('test_' . $test_id);
+                                $session->remove('current_question_' . $test_id);
+                                $session->remove('right_count_' . $test_id);
+                                $session->remove('answers_' . $test_id);
+                                $countAll = count($testModel->sorted_questions);
+                                $countNotRight = 0;
+                                $percentRight = 0;
+                                if ($countAll !== 0) {
+                                    $countNotRight = $countAll - $right_count;
+                                    $percentRight = round(($right_count/$countAll)*100);
+                                }
+                                $testResult = ['countRight' => $right_count, 
+                                        'countNotRight' => $countNotRight, 
+                                        'percentRight' => $percentRight, 
+                                        'testModel' => $testModel,
+                                        'answers' => $answers];
+                                $session->set('result_' . $test_id, $testResult);
+                                return $this->render('result', 
+                                        ['countRight' => $right_count, 
+                                        'countNotRight' => $countNotRight, 
+                                        'percentRight' => $percentRight, 
+                                        'testModel' => $testModel,
+                                        'answers' => $answers]);
+                            }
+                        } else {
+                            $error = 'Выберите вариант ответа';
+                            return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
                         }
                     } else {
-                        $error = 'Выберите вариант ответа';
                         return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
                     }
                 } else {
-                    return $this->render('question', ['error' => $error, 'question' => $question, 'test_id' => $test_id]);
+                    $this->redirect(['/testing/test_start', 'test_id' => $test_id]);
                 }
             } else {
-                $this->redirect(['/testing/test_start', 'test_id' => $test_id]);
+                $this->redirect(['/testing/tests']);
             }
-        } else {
-            $this->redirect(['/testing/tests']);
         }
     }
     
@@ -152,13 +183,6 @@ class TestingController extends Controller {
             }
         }
         return true;
-    }
-    
-    private function getPostParameter($post, $paramName, $defaultValue = '') {
-        if ($post && is_array($post) && array_key_exists($paramName, $post)) {
-            return $post[$paramName];
-        }
-        return $defaultValue;
     }
     
 }

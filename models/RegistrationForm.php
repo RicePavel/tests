@@ -16,8 +16,8 @@ class RegistrationForm extends Model {
         return  [
                 [['login', 'password', 'password2'], 'required'],
                 [['login', 'password', 'password2'], 'safe'],
-                [['password2'], 'validatePassword'],
-                [['login'], 'checkLogin'],
+                ['password2', 'compare', 'compareAttribute' => 'password', 'message' => 'Пароли должны совпадать'],
+                //[['login'], 'checkLogin'],
                 [['login', 'password', 'password2'], 'string', 'length' => [4, 255]],
                 [['login'], 'email']
             ];
@@ -38,12 +38,6 @@ class RegistrationForm extends Model {
         }
     }
     
-    public function validatePassword($attribute, $params) {
-        if ($this->password !== $this->password2) {
-            $this->addError($attribute, 'Пароли должны совпадать');
-        }
-    }
-    
     public function registration() {
         if ($this->validate()) {
             $user = new Users();
@@ -58,6 +52,8 @@ class RegistrationForm extends Model {
                 } else {
                     $this->addErrors($user->getErrors());
                 }
+            } else {
+                $this->addErrors($user->getErrors());
             }
         }
         return false;
